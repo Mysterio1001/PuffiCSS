@@ -1,3 +1,6 @@
+import { getLocale, normalizeLocale, supportedLocales } from './i18n.js';
+import { catalogLocales } from './locales/catalog.js';
+
 export const categories = [
   { id: 'all', name: '全部動畫', icon: 'grid' },
   { id: 'interaction', name: '微互動', icon: 'pointer' },
@@ -228,6 +231,83 @@ export const easings = {
   'cubic-bezier(0.34, 1.56, 0.64, 1)': 'Spring · 彈性',
 };
 
+const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+
+function localizedMarkup(item, demo) {
+  const text = Object.fromEntries(Object.entries(demo).map(([key, value]) => [key, Array.isArray(value) ? value.map(escapeHTML) : escapeHTML(value)]));
+  switch (item.id) {
+    case 'lift-button': return `<button class="mk-lift-button">${text.text} <span aria-hidden="true">↗</span></button>`;
+    case 'text-reveal': return `<div class="mk-text-reveal" aria-label="${text.label}"><span aria-hidden="true">${text.lead}</span><strong aria-hidden="true">${Array.from(demo.reveal).map(character => `<i>${escapeHTML(character)}</i>`).join('')}</strong></div>`;
+    case 'aurora': return `<div class="mk-aurora" aria-label="${text.label}"><i></i><i></i><i></i><span>${text.text}</span></div>`;
+    case 'underline': return `<a class="mk-underline" href="#explore">${text.text} <span aria-hidden="true">↗</span></a>`;
+    case 'gradient-text': return `<div class="mk-gradient-text">${text.lines.join('<br>')}<span>✳</span></div>`;
+    case 'fade-up': return `<div class="mk-fade-up"><span>✺</span><strong>${text.heading}</strong><small>${text.detail}</small></div>`;
+    case 'mesh': return `<div class="mk-mesh"><span>${text.text}</span><b>✳</b></div>`;
+    case 'tilt-card': return `<button class="mk-tilt-card"><small>${text.label}</small><span>✳</span><strong>${text.text} <b>↗</b></strong></button>`;
+    case 'typewriter': return `<div class="mk-typewriter"><small>${text.label}</small><span>${text.text}</span></div>`;
+    case 'scale-in': return `<div class="mk-scale-in"><span>✓</span><strong>${text.heading}</strong><small>${text.detail}</small></div>`;
+    case 'grid-drift': return `<div class="mk-grid-drift" aria-label="${text.label}"><i></i><span>${text.text}</span></div>`;
+    case 'spin-flower': return `<div class="mk-spin-flower" aria-label="${text.label}"><span>✳</span><small>${text.text}</small></div>`;
+    default: return item.html.replace(/aria-label="[^"]*"/, `aria-label="${text.label}"`);
+  }
+}
+
+function localizeAnimation(item, locale) {
+  const messages = catalogLocales[locale];
+  const translation = messages.animations[item.id];
+  if (!translation) return item;
+  // Always translate from the source so changing an already localized item is reversible.
+  const source = animations.find(animation => animation.id === item.id) ?? item;
+  let css = source.css;
+  let typewriterWidth;
+  let typingSteps;
+  if (locale !== 'en') css = css.replace(/letter-spacing: -?[\d.]+px;/g, 'letter-spacing: 0;');
+  if (locale !== 'en' && ['aurora', 'mesh', 'grid-drift'].includes(item.id)) {
+    css = css.replace(`.mk-${item.id} span {`, `.mk-${item.id} span { max-width: calc(100% - 28px); text-align: center; overflow-wrap: anywhere;`);
+  }
+  if (item.id === 'text-reveal') {
+    const characters = Array.from(translation.demo.reveal);
+    css = css.replace(/\.mk-text-reveal i:nth-child\(\d+\) \{[^}]+\}\n/g, '');
+    const delays = characters.slice(1).map((_, index) => `.mk-text-reveal i:nth-child(${index + 2}) { animation-delay: calc(var(--mk-delay) + ${((index + 1) * .09).toFixed(2)}s); }`).join('\n');
+    css = css.replace('@keyframes mk-word', `${delays}\n.mk-text-reveal i:last-child { color: #9479ed; }\n@keyframes mk-word`);
+    if (locale !== 'en') css = css.replace('font-size: 64px;', 'font-size: 42px;');
+  }
+  if (item.id === 'gradient-text' && locale !== 'en') css = css.replace('800 49px/.98', '800 42px/1.15');
+  if (item.id === 'typewriter') {
+    typingSteps = Array.from(translation.demo.text).length;
+    typewriterWidth = `${typingSteps}${locale === 'en' ? 'ch' : 'em'}`;
+    css = css.replaceAll('15ch', 'var(--mk-type-width)')
+      .replace('steps(15, end)', 'steps(var(--mk-type-steps), end)')
+      .replace('.mk-typewriter {', `.mk-typewriter { --mk-type-width: ${typewriterWidth}; --mk-type-steps: ${typingSteps};`);
+  }
+  return {
+    ...item,
+    locale,
+    name: translation.name,
+    tagline: translation.tagline,
+    description: translation.description,
+    tags: source.tags.map(tag => messages.tags[tag]),
+    badge: source.badge ? messages.badges[source.badge] : undefined,
+    badgeType: source.badge === '熱門' ? 'hot' : source.badge ? 'featured' : undefined,
+    html: localizedMarkup(source, translation.demo),
+    css,
+    ...(typewriterWidth ? { typewriterWidth, typingSteps } : {}),
+  };
+}
+
+export function getAnimations(locale = getLocale()) {
+  return animations.map(item => localizeAnimation(item, normalizeLocale(locale)));
+}
+
+export function getCategories(locale = getLocale()) {
+  const names = catalogLocales[normalizeLocale(locale)].categories;
+  return categories.map(category => ({ ...category, name: names[category.id] }));
+}
+
+export function getEasings(locale = getLocale()) {
+  return { ...catalogLocales[normalizeLocale(locale)].easings };
+}
+
 export function defaultSettings(item) {
   return { duration: item.duration, delay: 0, easing: ['orbit-loader', 'grid-drift', 'spin-flower'].includes(item.id) ? 'linear' : 'ease-in-out', accent: item.accent, loop: true };
 }
@@ -238,7 +318,7 @@ export function settingsStyle(settings) {
 
 export function demoClass(item, settings = defaultSettings(item)) {
   const timing = `${settings.duration}-${settings.delay}`.replaceAll('.', '_');
-  return `mk-demo-${item.id}-${timing}-${settings.accent.slice(1)}-${Object.keys(easings).indexOf(settings.easing)}-${settings.loop ? 'loop' : 'once'}`;
+  return `mk-demo-${item.id}-${timing}-${settings.accent.slice(1)}-${Object.keys(easings).indexOf(settings.easing)}-${settings.loop ? 'loop' : 'once'}${item.locale ? `-${item.locale.toLowerCase()}` : ''}`;
 }
 
 const singleEntrance = {
@@ -254,33 +334,43 @@ export function demoCSS(item, settings = defaultSettings(item)) {
   let motion = item.css.replaceAll(' infinite', ' var(--mk-iterations) both').replaceAll(' linear var(--mk-delay)', ' var(--mk-easing) var(--mk-delay)');
   if (!settings.loop && singleEntrance[item.id]) {
     const once = singleEntrance[item.id];
-    motion = motion.replace(/@keyframes[\s\S]*$/, `@keyframes ${once.name}-once { ${once.frames} }`)
+    const frames = item.typewriterWidth ? once.frames.replace('15ch', 'var(--mk-type-width)') : once.frames;
+    motion = motion.replace(/@keyframes[\s\S]*$/, `@keyframes ${once.name}-once { ${frames} }`)
       .replaceAll(`${once.name} var(`, `${once.name}-once var(`);
   }
   motion = motion.replaceAll(`.mk-${item.id}`, `${wrapper} .mk-${item.id}`);
   return `${wrapper} {\n  ${settingsStyle(settings).split('; ').join(';\n  ')}\n  --mk-iterations: ${settings.loop ? 'infinite' : '1'};\n  position: relative;\n  display: grid;\n  place-items: center;\n  min-height: 320px;\n  overflow: hidden;\n  border-radius: 16px;\n  background: ${item.color};\n}\n\n${motion}\n\n@media (prefers-reduced-motion: reduce) {\n  ${wrapper} *, ${wrapper} *::before, ${wrapper} *::after {\n    animation: none !important;\n    transition: none !important;\n  }\n}`;
 }
 
-export function generateCode(item, settings = defaultSettings(item), format = 'html') {
+export function generateCode(item, settings = defaultSettings(item), format = 'html', locale = getLocale()) {
+  locale = normalizeLocale(locale);
+  item = localizeAnimation(item, locale);
   const css = demoCSS(item, settings);
-  const markup = `<div class="mk-demo-${item.id} ${demoClass(item, settings)}">\n  ${item.html}\n</div>`;
+  const markup = `<div class="mk-demo-${item.id} ${demoClass(item, settings)}" lang="${locale}">\n  ${item.html}\n</div>`;
   if (format === 'css') return css;
   if (format === 'react') {
     const jsx = markup.replaceAll('class=', 'className=').replace(/<(br|hr|img|input)([^>]*?)(?<!\/)>(?!<\/)/g, '<$1$2 />');
     return `export default function MotionDemo() {\n  return (\n    <>\n      <style>{\`${css}\`}</style>\n      ${jsx}\n    </>\n  );\n}\n`;
   }
   if (format === 'vue') return `<template>\n  ${markup}\n</template>\n\n<style scoped>\n${css}\n</style>\n`;
-  return `<!doctype html>\n<html lang="zh-Hant">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${item.name} — PuffiCSS</title>\n  <style>\n${css}\n  </style>\n</head>\n<body>\n  ${markup}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="${locale}">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>${escapeHTML(item.name)} — PuffiCSS</title>\n  <style>\n${css}\n  </style>\n</head>\n<body>\n  ${markup}\n</body>\n</html>\n`;
 }
 
-export function filterAnimations({ category = 'all', query = '', favorites = [], favoritesOnly = false, sort = 'featured' } = {}) {
-  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-  const items = animations.filter(item =>
+const searchText = new Map(animations.map(item => [item.id, [item.id, item.english, ...supportedLocales.flatMap(locale => {
+  const messages = catalogLocales[locale];
+  const translation = messages.animations[item.id];
+  return [translation.name, translation.tagline, translation.description, messages.categories[item.category], ...item.tags.map(tag => messages.tags[tag])];
+})].join(' ').normalize('NFKC').toLocaleLowerCase()]));
+
+export function filterAnimations({ category = 'all', query = '', favorites = [], favoritesOnly = false, sort = 'featured', locale = getLocale() } = {}) {
+  locale = normalizeLocale(locale);
+  const terms = query.normalize('NFKC').trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const items = getAnimations(locale).filter(item =>
     (category === 'all' || item.category === category) &&
     (!favoritesOnly || favorites.includes(item.id)) &&
-    terms.every(term => `${item.name} ${item.english} ${item.description} ${item.tags.join(' ')} ${categories.find(c => c.id === item.category).name}`.toLocaleLowerCase().includes(term))
+    terms.every(term => searchText.get(item.id).includes(term))
   );
   if (sort === 'newest') items.reverse();
-  if (sort === 'name') items.sort((a, b) => a.english.localeCompare(b.english));
+  if (sort === 'name') items.sort((a, b) => a.name.localeCompare(b.name, locale));
   return items;
 }

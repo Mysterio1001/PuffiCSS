@@ -1,35 +1,39 @@
-# PuffiCSS｜輕巧的網頁動效庫
+**English** · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md)
 
-網頁動畫靈感庫。使用原生 HTML、CSS 與 JavaScript，無需安裝前端套件。
+# PuffiCSS | A lightweight web animation library
 
-## 提供的功能
+A collection of web animation ideas built with plain HTML, CSS, and JavaScript. No frontend packages to install.
 
-- 18 種本專案撰寫的動畫範例，分為微互動、文字、進場、背景、載入與強調效果。
-- 即時預覽、暫停、重播，以及中英文關鍵字搜尋。
-- 分類、排序、收藏、隨機靈感與使用指南。
-- 編輯動畫時間、延遲、緩動曲線、主題色及循環播放；打字機使用固定 steps 節奏。
-- 複製或下載完整 HTML + CSS、CSS、React JSX 或 Vue SFC。
-- 同頁引用不同設定的動效時，樣式彼此隔離。
-- 關閉循環後，進場與文字動畫保留最後的可見內容。
-- 淺色／深色主題、手機導覽、鍵盤操作、減少動態效果偏好支援。
-- 收藏與主題儲存在目前瀏覽器，不需帳號；沒有後端與跨裝置同步。
+## Features
 
-## 引用動畫
+- 18 original animation examples across micro-interactions, text, entrances, backgrounds, loaders, and emphasis effects.
+- Live previews, pause and replay controls, and keyword search in English, Traditional Chinese, and Japanese.
+- Categories, sorting, favorites, random inspiration, and a usage guide.
+- Adjustable duration, delay, easing, accent color, and looping; the typewriter effect uses a fixed `steps` rhythm.
+- Copy or download complete HTML + CSS, CSS, React JSX, or Vue SFC examples.
+- Isolated styles when using animations with different settings on the same page.
+- Entrance and text animations keep their final visible content when looping is turned off.
+- Light and dark themes, mobile navigation, keyboard controls, and support for reduced motion preferences.
+- English by default, with English, 繁體中文, and 日本語 available from the language selector in the header.
+- Language, favorites, and theme preferences saved in the current browser. No account, backend, or cross-device sync.
 
-點擊卡片的「取得程式碼」，調整參數並選擇格式。
+## Using animations
 
-| 格式       | 使用方式                                                                       |
-| ---------- | ------------------------------------------------------------------------------ |
-| HTML + CSS | 完整獨立頁面，儲存為 `.html` 即可開啟；嵌入既有頁面時取出 style 與 body 內容。 |
-| CSS        | 搭配 HTML + CSS 分頁中的 body 標記，保留完整的容器 class。                     |
-| React      | 儲存為 `MotionDemo.jsx`，匯入後使用 `<MotionDemo />`。需要既有 React 專案。    |
-| Vue        | 儲存為 `MotionDemo.vue`，匯入後使用 `<MotionDemo />`。需要既有 Vue 專案。      |
+Click a card's “Get code” button, adjust the settings, and choose a format.
 
-動畫範例本身不連線至任何 CDN。網站字型使用 Google Fonts，無網路時會使用系統字型。
+| Format     | Usage |
+| ---------- | ----- |
+| HTML + CSS | A complete standalone page. Save it as `.html` to open it, or extract the `style` and `body` contents to embed it in an existing page. |
+| CSS        | Use with the `body` markup from the HTML + CSS tab, keeping all container classes. |
+| React      | Save as `MotionDemo.jsx`, import it, and render `<MotionDemo />` in an existing React project. |
+| Vue        | Save as `MotionDemo.vue`, import it, and use `<MotionDemo />` in an existing Vue project. |
 
-## 授權
+The animation examples do not connect to any CDN. The website uses Google Fonts and falls back to system fonts when offline.
 
-MIT License；可用於個人與商業專案，完整條款見 `LICENSE`。
+## License
 
-開發者：交給我科技工作室 handlebyme.tech  
-聯繫方式：contact@handlebyme.com
+MIT License. Available for personal and commercial projects; see [LICENSE](LICENSE) for the full terms.
+
+Developed by: 交給我科技工作室 · handlebyme.tech
+
+Contact: [contact@handlebyme.com](mailto:contact@handlebyme.com)

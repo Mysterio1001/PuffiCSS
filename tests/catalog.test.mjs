@@ -29,8 +29,8 @@ test('category, favorites and search filters compose correctly', () => {
 test('sorting does not mutate the original catalog order', () => {
   const original = animations.map(a => a.id);
   assert.equal(filterAnimations({sort:'newest'})[0].id, original.at(-1));
-  const names = filterAnimations({sort:'name'}).map(a => a.english);
-  assert.deepEqual(names, [...names].sort((a,b) => a.localeCompare(b)));
+  const names = filterAnimations({sort:'name', locale:'en'}).map(a => a.name);
+  assert.deepEqual(names, [...names].sort((a,b) => a.localeCompare(b, 'en')));
   assert.deepEqual(animations.map(a => a.id), original);
 });
 
