@@ -67,7 +67,7 @@ $('#app').innerHTML = `
         <button data-action="guide">如何使用 ${icon('arrowUp')}</button>
         <div class="developer-info" aria-label="開發者與聯繫方式">
           <div class="developer-credit"><span class="developer-label">開發者</span><strong>交給我科技工作室</strong><span class="developer-english" lang="en">handlebyme.tech</span></div>
-          <div class="developer-contact"><span class="developer-label">聯繫方式</span><a href="mailto:handlebyme.tech@gmail.com">handlebyme.tech@gmail.com</a></div>
+          <div class="developer-contact"><span class="developer-label">聯繫方式</span><a href="mailto:contact@handlebyme.com">contact@handlebyme.com</a></div>
         </div>
       </footer>
     </main>
