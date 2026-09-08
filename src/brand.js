@@ -1,0 +1,17 @@
+// One vector source for the interface, favicon and downloadable brand mark.
+export const logo = `<svg xmlns="http://www.w3.org/2000/svg" class="logo-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <g stroke="#69469e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m47 31 12-7c2 4 1 7-2 10 3 3 4 6 2 9l-12-7Z" fill="#ae91df"/>
+    <path d="m26 13 3-8 4 8M15 20l-2-10 9 6M10 31l-7-6 9-1M15 45l-7 6 2-10M26 51l3 9 4-9M38 17l8-6-2 11M38 48l8 7-2-11" fill="#c8b0f0"/>
+    <circle cx="29" cy="33" r="21" fill="#bea3ed"/>
+    <path d="M9 38c10-7 30-7 40 0-2 10-10 16-20 16S11 48 9 38Z" fill="#fff3df" stroke="none"/>
+    <circle cx="29" cy="33" r="21"/>
+    <path d="M42 34c5 0 9 3 10 6-4 4-9 4-12 0" fill="#d7c3f6"/>
+    <path d="m43 38 5 2" stroke-width="1.6"/>
+  </g>
+  <g fill="#9470c9"><circle cx="20" cy="21" r="1.5"/><circle cx="29" cy="18.5" r="1.5"/><circle cx="38" cy="22" r="1.5"/></g>
+  <g fill="#44305f"><ellipse cx="20" cy="30" rx="2.6" ry="3.2"/><ellipse cx="32" cy="30" rx="2.6" ry="3.2"/></g>
+  <g fill="#fff"><circle cx="20.7" cy="29.2" r=".8"/><circle cx="32.7" cy="29.2" r=".8"/></g>
+  <g fill="#eaa2b4" opacity=".8"><ellipse cx="16.5" cy="37" rx="3.1" ry="2.1"/><ellipse cx="35.5" cy="37" rx="3.1" ry="2.1"/></g>
+  <path d="M23 37.5q3 4 6 0" stroke="#69469e" stroke-width="2" stroke-linecap="round"/>
+</svg>`;

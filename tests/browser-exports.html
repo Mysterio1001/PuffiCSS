@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><title>PuffiCSS — 匯出驗證</title></head>
+<body>
+  <h1>獨立 HTML 匯出驗證</h1><pre id="results">執行中…</pre><div id="fixtures"></div>
+  <script type="module">
+    import { animations, generateCode, defaultSettings, demoClass, demoCSS } from '../src/catalog.js';
+    const results = await Promise.all(animations.map(item => new Promise(resolve => {
+      const frame = document.createElement('iframe');
+      frame.width = '400'; frame.height = '360'; frame.title = item.name;
+      frame.srcdoc = generateCode(item, { ...defaultSettings(item), duration: 1.7, delay: 0.2 });
+      frame.onload = () => {
+        const d = frame.contentDocument, w = frame.contentWindow;
+        const demo = d.querySelector('.mk-demo-' + item.id);
+        const children = [...demo.querySelectorAll('*')];
+        const timing = w.getComputedStyle(demo).getPropertyValue('--mk-duration').trim() === '1.7s';
+        const markup = !!d.querySelector('.mk-' + item.id);
+        const animated = item.trigger === 'hover'
+          ? children.some(el => w.getComputedStyle(el).transitionDuration.split(', ').includes('1.7s'))
+          : children.some(el => w.getComputedStyle(el).animationName !== 'none');
+        // Apply the actual exported reduced-motion declarations to test their static fallback.
+        const style = d.createElement('style');
+        style.textContent = [...d.styleSheets[0].cssRules]
+          .filter(rule => rule.conditionText === '(prefers-reduced-motion: reduce)')
+          .flatMap(rule => [...rule.cssRules].map(child => child.cssText)).join('\n');
+        d.head.append(style);
+        const reduced = children.every(el => w.getComputedStyle(el).animationName === 'none' && w.getComputedStyle(el).transitionDuration === '0s');
+        const visible = children.every(el => w.getComputedStyle(el).opacity !== '0');
+        resolve({ id: item.id, pass: timing && markup && animated && reduced && visible, timing, markup, animated, reduced, visible });
+      };
+      document.querySelector('#fixtures').append(frame);
+    })));
+    const onceIds = ['fade-up', 'scale-in', 'stack-reveal', 'text-reveal', 'typewriter'];
+    const onceResults = await Promise.all(onceIds.map(id => new Promise(resolve => {
+      const item = animations.find(a => a.id === id);
+      const frame = document.createElement('iframe');
+      frame.width = '400'; frame.height = '360'; frame.title = `${item.name} 單次進場`;
+      frame.srcdoc = generateCode(item, {...defaultSettings(item), loop:false});
+      frame.onload = () => {
+        const d = frame.contentDocument, w = frame.contentWindow;
+        const demo = d.querySelector('.mk-demo-' + id);
+        const animated = demo.getAnimations({subtree:true});
+        animated.forEach(animation => animation.finish());
+        const visible = [...demo.querySelectorAll('*')].every(el => w.getComputedStyle(el).opacity !== '0');
+        const textVisible = id !== 'typewriter' || d.querySelector('.mk-typewriter span').getBoundingClientRect().width > 100;
+        resolve({id:`${id}:single-entrance`, pass:visible && textVisible && animated.length > 0});
+      };
+      document.querySelector('#fixtures').append(frame);
+    })));
+    results.push(...onceResults);
+    const variants = await new Promise(resolve => {
+      const item = animations.find(a => a.id === 'orbit-loader');
+      const configs = [
+        {...defaultSettings(item), duration:1, accent:'#ff0000', loop:false},
+        {...defaultSettings(item), duration:5, accent:'#0000ff', loop:true},
+      ];
+      const frame = document.createElement('iframe'); frame.title = '同頁多版本隔離驗證';
+      frame.srcdoc = configs.map(settings => `<style>${demoCSS(item,settings)}</style><div class="${demoClass(item,settings)}">${item.html}</div>`).join('');
+      frame.onload = () => {
+        const d = frame.contentDocument, w = frame.contentWindow;
+        const isolated = configs.every(settings => {
+          const wrapper = d.querySelector('.'+demoClass(item,settings));
+          const styles = w.getComputedStyle(wrapper);
+          const moving = wrapper.querySelector('.mk-orbit-loader > div');
+          return styles.getPropertyValue('--mk-accent').trim() === settings.accent
+            && w.getComputedStyle(moving).animationDuration === settings.duration+'s'
+            && w.getComputedStyle(moving).animationIterationCount === (settings.loop ? 'infinite' : '1');
+        });
+        resolve({id:'same-page-variant-isolation',pass:isolated});
+      };
+      document.querySelector('#fixtures').append(frame);
+    });
+    results.push(variants);
+    document.querySelector('#results').textContent = JSON.stringify({ passed: results.filter(result => result.pass).length, total: results.length, results }, null, 2);
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+const paths = {
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  pointer: '<path d="m5 3 14 9-7 1-3 7-4-17Z"/><path d="m13 14 5 6"/>',
+  type: '<path d="M4 6V4h16v2M12 4v16M8 20h8"/>',
+  layers: '<path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/>',
+  orb: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9" transform="rotate(40 12 12)"/>',
+  loader: '<path d="M12 3a9 9 0 1 1-9 9"/><path d="M7 4 5 6M3 9h.01"/>',
+  sparkles: '<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3ZM20 2v4M18 4h4"/>',
+  star: '<path d="m12 3 2.8 5.7 6.3.9-4.6 4.4 1.1 6.3-5.6-3-5.6 3 1.1-6.3L2.9 9.6l6.3-.9L12 3Z"/>',
+  bookmark: '<path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17l-6-4-6 4V4Z"/>',
+  book: '<path d="M12 5v16M12 5C8 2 3 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-1-1-6-2-10 1Z"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+  arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
+  arrowUp: '<path d="M6 18 18 6M6 6h12v12"/>',
+  arrowDown: '<path d="M6 6 18 18M6 18h12V6"/>',
+  chevron: '<path d="m8 10 4 4 4-4"/>',
+  code: '<path d="m7 7-5 5 5 5m10-10 5 5-5 5m-3-14-4 18"/>',
+  copy: '<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  replay: '<path d="M3 11a9 9 0 1 1 2.6 7M3 4v7h7"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  play: '<path d="m8 4 13 8-13 8V4Z"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>',
+  moon: '<path d="M21 13a9 9 0 0 1-10-10A9 9 0 1 0 21 13Z"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  sliders: '<path d="M4 7h5m4 0h7M4 17h9m4 0h3"/><circle cx="11" cy="7" r="2"/><circle cx="15" cy="17" r="2"/>',
+  heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
+  download: '<path d="M12 3v12m-5-5 5 5 5-5M4 15v5h16v-5"/>',
+  bolt: '<path d="m13 2-9 12h7l-1 8 10-13h-8l1-7Z"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+};
+export function icon(name, className = '') {
+  return `<svg class="icon ${className}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.sparkles}</svg>`;
+}
+export { logo } from './brand.js';
