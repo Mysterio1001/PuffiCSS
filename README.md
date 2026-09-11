@@ -21,12 +21,12 @@ A collection of web animation ideas built with plain HTML, CSS, and JavaScript. 
 
 Click a card's “Get code” button, adjust the settings, and choose a format.
 
-| Format     | Usage |
-| ---------- | ----- |
+| Format     | Usage                                                                                                                                  |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | HTML + CSS | A complete standalone page. Save it as `.html` to open it, or extract the `style` and `body` contents to embed it in an existing page. |
-| CSS        | Use with the `body` markup from the HTML + CSS tab, keeping all container classes. |
-| React      | Save as `MotionDemo.jsx`, import it, and render `<MotionDemo />` in an existing React project. |
-| Vue        | Save as `MotionDemo.vue`, import it, and use `<MotionDemo />` in an existing Vue project. |
+| CSS        | Use with the `body` markup from the HTML + CSS tab, keeping all container classes.                                                     |
+| React      | Save as `MotionDemo.jsx`, import it, and render `<MotionDemo />` in an existing React project.                                         |
+| Vue        | Save as `MotionDemo.vue`, import it, and use `<MotionDemo />` in an existing Vue project.                                              |
 
 The animation examples do not connect to any CDN. The website uses Google Fonts and falls back to system fonts when offline.
 
@@ -34,6 +34,6 @@ The animation examples do not connect to any CDN. The website uses Google Fonts 
 
 MIT License. Available for personal and commercial projects; see [LICENSE](LICENSE) for the full terms.
 
-Developed by: 交給我科技工作室 · handlebyme.tech
+Developed by: 交給我科技工作室 · Handle by Me Tech Studio
 
 Contact: [contact@handlebyme.com](mailto:contact@handlebyme.com)

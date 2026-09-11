@@ -21,12 +21,12 @@
 
 點擊卡片的「取得程式碼」，調整參數並選擇格式。
 
-| 格式       | 使用方式 |
-| ---------- | -------- |
+| 格式       | 使用方式                                                                           |
+| ---------- | ---------------------------------------------------------------------------------- |
 | HTML + CSS | 完整獨立頁面，儲存為 `.html` 即可開啟；嵌入既有頁面時取出 `style` 與 `body` 內容。 |
-| CSS        | 搭配 HTML + CSS 分頁中的 `body` 標記，保留完整的容器 class。 |
-| React      | 儲存為 `MotionDemo.jsx`，匯入後使用 `<MotionDemo />`。需要既有 React 專案。 |
-| Vue        | 儲存為 `MotionDemo.vue`，匯入後使用 `<MotionDemo />`。需要既有 Vue 專案。 |
+| CSS        | 搭配 HTML + CSS 分頁中的 `body` 標記，保留完整的容器 class。                       |
+| React      | 儲存為 `MotionDemo.jsx`，匯入後使用 `<MotionDemo />`。需要既有 React 專案。        |
+| Vue        | 儲存為 `MotionDemo.vue`，匯入後使用 `<MotionDemo />`。需要既有 Vue 專案。          |
 
 動畫範例本身不連線至任何 CDN。網站字型使用 Google Fonts，無網路時會使用系統字型。
 
@@ -34,6 +34,6 @@
 
 MIT License；可用於個人與商業專案，完整條款見 [LICENSE](LICENSE)。
 
-開發者：交給我科技工作室 · handlebyme.tech
+開發者：交給我科技工作室 · Handle by Me Tech Studio
 
 聯繫方式：[contact@handlebyme.com](mailto:contact@handlebyme.com)
